@@ -6,6 +6,6 @@ body {
   @apply bg-court text-slate-100 font-body;
 }
 
-h1, h2, h3, h4, .font-display {
+h1,h2,h3,h4{
   @apply font-display tracking-wide;
 }
