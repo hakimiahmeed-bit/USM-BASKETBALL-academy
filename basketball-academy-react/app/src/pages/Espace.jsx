@@ -3,6 +3,8 @@ import { useAuth } from '../context/AuthContext'
 
 const CONTENT = {
   poussin: {
+    emoji: '🌟',
+    gradient: 'from-amber-500/20 via-court to-court',
     title: 'Espace Poussin U10',
     badge: 'Initiation & Épanouissement',
     tagline: 'Découvrez le plaisir du jeu !',
@@ -25,6 +27,8 @@ const CONTENT = {
     },
   },
   benjamin: {
+    emoji: '🏀',
+    gradient: 'from-orange-500/20 via-court to-court',
     title: 'Espace Benjamin U12',
     badge: 'Formation & Progression',
     tagline: 'Développez vos fondamentaux !',
@@ -47,6 +51,8 @@ const CONTENT = {
     },
   },
   'academie-jeunes': {
+    emoji: '🔥',
+    gradient: 'from-red-500/20 via-court to-court',
     title: 'Espace Académie Jeunes',
     badge: 'Orientation Compétition',
     tagline: 'Se préparer au haut niveau !',
@@ -69,6 +75,8 @@ const CONTENT = {
     },
   },
   'academie-seniors': {
+    emoji: '🏆',
+    gradient: 'from-yellow-500/20 via-court to-court',
     title: 'Espace Académie Seniors',
     badge: 'Haute Performance',
     tagline: 'Performance et compétition !',
@@ -92,112 +100,204 @@ const CONTENT = {
   },
 }
 
-function statutBadge(statut) {
-  if (statut === 'Approuvé') return 'bg-ember text-court'
-  if (statut === 'Rejeté') return 'bg-red-600 text-white'
-  return 'bg-slate-600 text-white'
+function initials(nom) {
+  if (!nom) return '?'
+  return nom
+    .split(' ')
+    .map((p) => p[0])
+    .join('')
+    .slice(0, 2)
+    .toUpperCase()
+}
+
+function paymentProgress(dateStr) {
+  if (!dateStr) return null
+  const paye = new Date(dateStr)
+  const today = new Date()
+  const diffDays = Math.floor((today - paye) / (1000 * 60 * 60 * 24))
+  const pct = Math.max(0, Math.min(100, Math.round((diffDays / 30) * 100)))
+  const restant = 30 - diffDays
+  return { pct, restant, expired: diffDays > 30 }
+}
+
+function statutMeta(statut) {
+  if (statut === 'Approuvé') return { dot: 'bg-emerald-400', label: 'Approuvé', ring: 'ring-emerald-400/40' }
+  if (statut === 'Rejeté') return { dot: 'bg-red-500', label: 'Rejeté', ring: 'ring-red-500/40' }
+  return { dot: 'bg-ember', label: 'En attente', ring: 'ring-ember/40' }
 }
 
 export default function Espace({ category }) {
   const { profile } = useAuth()
   const info = CONTENT[category]
   const [showTips, setShowTips] = useState(false)
+  const meta = statutMeta(profile?.statut)
+  const payment = paymentProgress(profile?.dateDernierPaiement)
 
   return (
-    <div>
-      <div className="bg-court border-b-4 border-ember py-12 text-center px-4">
-        <h1 className="text-3xl md:text-4xl font-bold text-ember mb-2">{info.title}</h1>
-        <span className="inline-block text-sm text-slate-300">
-          🥷 Coachs: {info.coachs.join(' & ')}
-        </span>
+    <div className="bg-court min-h-screen">
+      {/* HERO */}
+      <div className={`relative overflow-hidden bg-gradient-to-br ${info.gradient} border-b border-ember/30`}>
+        <div className="absolute -right-10 -top-10 text-[220px] opacity-10 select-none pointer-events-none animate-float">
+          {info.emoji}
+        </div>
+        <div className="max-w-4xl mx-auto px-4 py-16 relative">
+          <span className="inline-block text-4xl mb-3 animate-float">{info.emoji}</span>
+          <h1 className="text-3xl md:text-5xl font-bold text-white mb-2">
+            {info.title}
+          </h1>
+          <p className="text-ember font-semibold">
+            👋 Bon retour, {profile?.nom?.split(' ')[0] || 'champion'} !
+          </p>
+          <div className="mt-4 flex flex-wrap items-center gap-2 text-sm text-slate-300">
+            <span>🥷</span>
+            <span>Coachs&nbsp;: {info.coachs.join(' & ')}</span>
+          </div>
+        </div>
       </div>
 
-      <div className="max-w-4xl mx-auto px-4 py-10 space-y-8">
-        {/* Profile card */}
-        <div className="rounded-2xl border border-line bg-white text-court p-6 shadow">
-          <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
-            <div>
-              <div className="font-bold text-lg">{profile?.nom}</div>
-              <div className="text-slate-500 text-sm">{profile?.email}</div>
+      <div className="max-w-4xl mx-auto px-4 -mt-10 relative pb-16 space-y-6">
+
+        {/* PLAYER CARD */}
+        <div className="animate-fade-up rounded-3xl bg-gradient-to-br from-[#1a1a1a] to-court border border-ember/20 shadow-2xl p-6 md:p-8">
+          <div className="flex flex-wrap items-center gap-5">
+            <div className="w-16 h-16 rounded-2xl bg-ember text-court font-bold text-2xl flex items-center justify-center shrink-0 shadow-[0_0_20px_rgba(255,193,7,0.4)]">
+              {initials(profile?.nom)}
             </div>
-            <span className={`px-3 py-1 rounded-full text-xs font-bold ${statutBadge(profile?.statut)}`}>
-              {profile?.statut || 'En attente'}
-            </span>
+            <div className="flex-1 min-w-[180px]">
+              <div className="text-white font-bold text-lg">{profile?.nom}</div>
+              <div className="text-slate-400 text-sm">{profile?.email}</div>
+            </div>
+            <div className={`flex items-center gap-2 px-3 py-2 rounded-full bg-white/5 ring-2 ${meta.ring}`}>
+              <span className={`w-2.5 h-2.5 rounded-full ${meta.dot} animate-pulse-dot`} />
+              <span className="text-white text-sm font-bold">{meta.label}</span>
+            </div>
           </div>
-          <div className="text-sm text-slate-500">
-            Dernier paiement : <span className="font-semibold text-court">{profile?.dateDernierPaiement || 'Aucun paiement enregistré'}</span>
-          </div>
+
           {profile?.statut === 'En attente' && (
-            <p className="mt-3 text-sm text-amber-600">
-              Votre inscription est en attente de validation par l'administration.
+            <p className="mt-4 text-sm text-ember/90 bg-ember/10 border border-ember/30 rounded-xl px-4 py-3">
+              ⏳ Votre inscription est en attente de validation par l'administration.
             </p>
           )}
-        </div>
 
-        {/* Banner */}
-        <div className="rounded-2xl overflow-hidden bg-court text-white grid md:grid-cols-12">
-          <div className="md:col-span-7 p-6 md:p-8">
-            <span className="inline-block bg-ember text-court font-bold text-xs px-3 py-1 rounded-full mb-2">{info.badge}</span>
-            <h3 className="text-xl font-bold text-ember mb-2">{info.tagline}</h3>
-            <p className="text-slate-300 text-sm mb-4">{info.desc}</p>
-            <button
-              onClick={() => setShowTips(true)}
-              className="px-4 py-2 rounded-full border border-ember text-ember text-sm font-bold hover:bg-ember hover:text-court hover:shadow-[0_0_15px_rgba(255,193,7,0.5)] transition-all"
-            >
-              ℹ️ Voir plus : نصائح وإرشادات
-            </button>
-          </div>
-          <div className="md:col-span-5 max-h-[220px] overflow-hidden">
-            <img
-              src="https://images.unsplash.com/photo-1546519638-68e109498ffc?q=80&w=1000&auto=format&fit=crop"
-              alt="Training"
-              className="w-full h-full object-cover"
-            />
-          </div>
-        </div>
-
-        {/* Weekly schedule */}
-        <div>
-          <h4 className="font-bold text-lg mb-3">📅 Emploi du Temps Hebdomadaire</h4>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
-            {info.horaires.map((h) => (
-              <div key={h.jour} className="rounded-xl bg-white text-court p-4 shadow hover:-translate-y-1 hover:shadow-lg transition-all">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="font-bold">{h.jour}</span>
-                  <span className="text-xs font-bold bg-ember text-court px-2 py-1 rounded-full">Séance</span>
+          {/* Payment status */}
+          <div className="mt-5 pt-5 border-t border-white/10">
+            <div className="flex items-center justify-between text-sm mb-2">
+              <span className="text-slate-300 font-semibold">💳 Cotisation mensuelle</span>
+              <span className="text-slate-400">
+                {profile?.dateDernierPaiement || 'Aucun paiement enregistré'}
+              </span>
+            </div>
+            {payment ? (
+              <>
+                <div className="h-2.5 rounded-full bg-white/10 overflow-hidden">
+                  <div
+                    className={`h-full rounded-full transition-all duration-700 ${payment.expired ? 'bg-red-500' : 'bg-gradient-to-r from-ember to-yellow-300'}`}
+                    style={{ width: `${payment.pct}%` }}
+                  />
                 </div>
-                <div className="font-bold text-lg">⏰ {h.heure}</div>
-                <a href="https://maps.app.goo.gl/T6pmesV4CPice4yk8" target="_blank" rel="noreferrer" className="text-xs text-slate-500 hover:text-ember transition-colors">
+                <p className={`text-xs mt-2 font-semibold ${payment.expired ? 'text-red-400' : 'text-ember'}`}>
+                  {payment.expired ? `⚠️ Expiré depuis ${Math.abs(payment.restant)} jour(s)` : `✅ ${payment.restant} jour(s) restant(s) sur le cycle`}
+                </p>
+              </>
+            ) : (
+              <p className="text-xs text-slate-500">Aucun cycle de paiement actif pour le moment.</p>
+            )}
+          </div>
+        </div>
+
+        {/* TAGLINE BANNER */}
+        <div
+          className="animate-fade-up rounded-3xl overflow-hidden relative bg-court border border-line"
+          style={{ animationDelay: '0.1s' }}
+        >
+          <div className="grid md:grid-cols-12">
+            <div className="md:col-span-7 p-6 md:p-8">
+              <span className="inline-block bg-ember text-court font-bold text-xs px-3 py-1 rounded-full mb-3">
+                {info.badge}
+              </span>
+              <h3 className="text-2xl font-bold text-white mb-2">{info.tagline}</h3>
+              <p className="text-slate-400 text-sm mb-5">{info.desc}</p>
+              <button
+                onClick={() => setShowTips(true)}
+                className="group inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-ember text-court text-sm font-bold hover:shadow-[0_0_20px_rgba(255,193,7,0.55)] transition-all"
+              >
+                نصائح وإرشادات
+                <span className="transition-transform group-hover:translate-x-1">←</span>
+              </button>
+            </div>
+            <div className="md:col-span-5 min-h-[180px] overflow-hidden">
+              <img
+                src="https://images.unsplash.com/photo-1546519638-68e109498ffc?q=80&w=1000&auto=format&fit=crop"
+                alt="Training"
+                className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* WEEKLY SCHEDULE */}
+        <div className="animate-fade-up" style={{ animationDelay: '0.2s' }}>
+          <h4 className="font-bold text-lg text-white mb-3 flex items-center gap-2">
+            📅 Emploi du Temps Hebdomadaire
+          </h4>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {info.horaires.map((h, i) => (
+              <div
+                key={h.jour}
+                className="group relative rounded-2xl bg-gradient-to-br from-[#1a1a1a] to-court border border-line p-5 hover:border-ember/60 hover:-translate-y-1 hover:shadow-[0_10px_30px_rgba(255,193,7,0.15)] transition-all"
+              >
+                <div className="flex items-center justify-between mb-3">
+                  <span className="font-bold text-white">{h.jour}</span>
+                  <span className="text-[10px] font-bold bg-ember text-court px-2 py-1 rounded-full">Séance {i + 1}</span>
+                </div>
+                <div className="text-2xl font-bold text-ember mb-1">⏰ {h.heure}</div>
+                <a
+                  href="https://maps.app.goo.gl/T6pmesV4CPice4yk8"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-xs text-slate-400 hover:text-ember transition-colors inline-flex items-center gap-1"
+                >
                   📍 Terrain Fit Factory
                 </a>
               </div>
             ))}
-            <div className="rounded-xl bg-slate-100 text-slate-500 p-4 flex flex-col justify-center">
-              <div className="flex items-center justify-between">
-                <span className="font-semibold text-sm">Autres jours</span>
-                <span className="text-xs font-bold bg-slate-400 text-white px-2 py-1 rounded-full">Repos</span>
-              </div>
-              <p className="text-xs mt-2">🛌 Repos & Récupération</p>
+            <div className="rounded-2xl bg-white/5 border border-dashed border-slate-600 p-5 flex flex-col justify-center text-center">
+              <span className="text-2xl mb-1">🛌</span>
+              <span className="text-slate-400 text-sm font-semibold">Repos & Récupération</span>
+              <span className="text-slate-600 text-xs mt-1">Les autres jours</span>
             </div>
           </div>
         </div>
 
-        {/* Encadrement Technique */}
-        <div className="rounded-2xl bg-white text-court p-6 shadow">
-          <h4 className="font-bold text-lg mb-4">🧑‍🏫 Encadrement Technique</h4>
-          <div className="grid sm:grid-cols-2 gap-3">
+        {/* COACHES */}
+        <div className="animate-fade-up" style={{ animationDelay: '0.3s' }}>
+          <h4 className="font-bold text-lg text-white mb-3">🧑‍🏫 Encadrement Technique</h4>
+          <div className="grid sm:grid-cols-2 gap-4">
             {info.coachs.map((nom) => (
-              <div key={nom} className="flex items-center gap-3 p-3 rounded-xl bg-slate-50 border border-slate-200">
-                <div className="w-11 h-11 shrink-0 rounded-full bg-ember text-court flex items-center justify-center text-lg shadow-[0_0_10px_rgba(255,193,7,0.5)]">
-                  ✅
+              <div
+                key={nom}
+                className="flex items-center gap-4 p-4 rounded-2xl bg-gradient-to-br from-[#1a1a1a] to-court border border-line hover:border-ember/50 transition-colors"
+              >
+                <div className="w-12 h-12 shrink-0 rounded-full bg-ember text-court flex items-center justify-center text-lg font-bold shadow-[0_0_14px_rgba(255,193,7,0.5)]">
+                  {initials(nom)}
                 </div>
                 <div>
-                  <div className="font-bold">{nom}</div>
-                  <div className="text-slate-500 text-xs">Coach</div>
+                  <div className="font-bold text-white">{nom}</div>
+                  <div className="text-ember text-xs font-semibold">Coach certifié</div>
                 </div>
               </div>
             ))}
           </div>
+        </div>
+
+        {/* MOTIVATION STRIP */}
+        <div
+          className="animate-fade-up rounded-2xl bg-gradient-to-r from-ember/10 via-ember/5 to-transparent border border-ember/20 p-6 text-center"
+          style={{ animationDelay: '0.4s' }}
+        >
+          <p className="text-ember font-semibold italic" dir="rtl">
+            {info.tips.quote}
+          </p>
         </div>
       </div>
 
@@ -211,7 +311,7 @@ function TipsModal({ info, onClose }) {
   return (
     <div className="fixed inset-0 z-[100] bg-black/70 flex items-center justify-center p-4" onClick={onClose}>
       <div
-        className="bg-white text-court rounded-2xl shadow-2xl max-w-lg w-full max-h-[85vh] overflow-y-auto border-2 border-ember"
+        className="bg-white text-court rounded-2xl shadow-2xl max-w-lg w-full max-h-[85vh] overflow-y-auto border-2 border-ember animate-fade-up"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="bg-court text-ember p-5 border-b-[3px] border-ember flex items-start justify-between" dir="rtl">
