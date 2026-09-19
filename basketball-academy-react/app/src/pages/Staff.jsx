@@ -7,9 +7,9 @@ const direction = [
 ]
 
 const technique = [
-  { nom: 'Yassine Trabelsi', role: 'Directeur de section', img: '/images/p3.jpg', desc: 'Spécialisé dans le développement des jeunes.' },
-  { nom: 'Malek Ghanmi', role: 'Entraîneur U14', img: '/images/p4.jpg', desc: 'Coach certifié pour les jeunes catégories.' },
-  { nom: 'Med Salim Challakhi', role: 'Coach U12 & Mini-Basket', img: '/images/p5.jpg', desc: 'Spécialiste dans le développement fondamental et la motricité des petits.' },
+  { nom: 'Med Mahdi Bouallegue', role: 'Directeur de section', img: '/images/p3.jpg', desc: 'Spécialisé dans le développement des jeunes.' },
+  { nom: 'Malek Ghanmi', role: 'Coach', img: '/images/p4.jpg', desc: 'Coach certifié pour les jeunes catégories.' },
+  { nom: 'Med Salim Challakhi', role: 'Staff Technique', img: '/images/p5.jpg', desc: 'Spécialiste dans le développement fondamental et la motricité des petits.' },
 ]
 
 export default function Staff() {
