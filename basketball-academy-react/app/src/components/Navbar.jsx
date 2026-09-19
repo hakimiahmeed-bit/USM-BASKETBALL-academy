@@ -49,7 +49,7 @@ export default function Navbar() {
 
           {isAdmin ? (
             <>
-              <Link to="/admin" className="ml-3 px-4 py-2 rounded-full bg-ember text-court text-sm font-bold">
+              <Link to="/admin" className="ml-3 px-4 py-2 rounded-full bg-ember text-court text-sm font-bold hover:shadow-[0_0_15px_rgba(255,193,7,0.5)] transition-shadow">
                 Dashboard
               </Link>
               <button onClick={handleLogout} className="ml-2 px-4 py-2 rounded-full border border-red-500 text-red-400 text-sm font-bold">
@@ -58,7 +58,7 @@ export default function Navbar() {
             </>
           ) : user ? (
             <>
-              <Link to={spacePathFor(profile?.categorie)} className="ml-3 px-4 py-2 rounded-full bg-ember text-court text-sm font-bold">
+              <Link to={spacePathFor(profile?.categorie)} className="ml-3 px-4 py-2 rounded-full bg-ember text-court text-sm font-bold hover:shadow-[0_0_15px_rgba(255,193,7,0.5)] transition-shadow">
                 Mon Espace
               </Link>
               <button onClick={handleLogout} className="ml-2 px-4 py-2 rounded-full border border-red-500 text-red-400 text-sm font-bold">
@@ -66,7 +66,7 @@ export default function Navbar() {
               </button>
             </>
           ) : (
-            <Link to="/connexion" className="ml-3 px-4 py-2 rounded-full border border-ember text-ember text-sm font-bold">
+            <Link to="/connexion" className="ml-3 px-4 py-2 rounded-full border border-ember text-ember text-sm font-bold hover:bg-ember hover:text-court hover:shadow-[0_0_15px_rgba(255,193,7,0.5)] transition-all">
               Connexion
             </Link>
           )}

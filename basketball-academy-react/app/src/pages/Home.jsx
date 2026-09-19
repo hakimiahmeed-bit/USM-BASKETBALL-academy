@@ -42,15 +42,15 @@ export default function Home() {
         </p>
         <div className="flex flex-wrap items-center justify-center gap-3">
           {user ? (
-            <Link to={espaceLink} className="px-6 py-3 rounded-full bg-ember text-court font-bold">
+            <Link to={espaceLink} className="px-6 py-3 rounded-full bg-ember text-court font-bold hover:shadow-[0_0_18px_rgba(255,193,7,0.5)] transition-shadow">
               🏀 Accéder à Mon Espace
             </Link>
           ) : (
-            <Link to="/inscription" className="px-6 py-3 rounded-full bg-ember text-court font-bold">
+            <Link to="/inscription" className="px-6 py-3 rounded-full bg-ember text-court font-bold hover:shadow-[0_0_18px_rgba(255,193,7,0.5)] transition-shadow">
               S'inscrire Maintenant
             </Link>
           )}
-          <Link to="/equipe" className="px-6 py-3 rounded-full border border-slate-400 text-slate-200 font-bold">
+          <Link to="/equipe" className="px-6 py-3 rounded-full border border-slate-400 text-slate-200 font-bold hover:border-ember hover:text-ember transition-colors">
             Découvrir le Staff
           </Link>
         </div>
@@ -71,7 +71,7 @@ export default function Home() {
               عائلتنا الرياضية لنبدأ رحلة التميز معاً.
             </p>
             {!user && (
-              <Link to="/inscription" className="inline-block px-5 py-2 rounded-full bg-ember text-court font-bold">
+              <Link to="/inscription" className="inline-block px-5 py-2 rounded-full bg-ember text-court font-bold hover:shadow-[0_0_18px_rgba(255,193,7,0.5)] transition-shadow">
                 انضم إلينا الآن ←
               </Link>
             )}
@@ -127,7 +127,7 @@ export default function Home() {
               href="https://www.facebook.com/people/USM-basketball/100095321656479/?sk=photos"
               target="_blank"
               rel="noreferrer"
-              className="inline-block px-5 py-2 rounded-full border border-ember text-ember font-bold"
+              className="inline-block px-5 py-2 rounded-full border border-ember text-ember font-bold hover:bg-ember hover:text-court hover:shadow-[0_0_18px_rgba(255,193,7,0.5)] transition-all"
             >
               Voir plus de photos sur Facebook
             </a>
