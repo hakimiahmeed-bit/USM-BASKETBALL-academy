@@ -1,0 +1,11 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  @apply bg-court text-slate-100 font-body;
+}
+
+h1, h2, h3, h4, .font-display {
+  @apply font-display tracking-wide;
+}
