@@ -56,6 +56,7 @@ export default function Dashboard() {
   }
 
   return (
+    <div className="bg-slate-100 min-h-[80vh]">
     <div className="max-w-6xl mx-auto px-4 py-10">
       <div className="grid sm:grid-cols-3 gap-4 mb-8">
         <StatCard label="Total Inscrits" value={stats.total} />
@@ -69,11 +70,11 @@ export default function Dashboard() {
           placeholder="Rechercher un candidat (nom ou email)..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="rounded-lg bg-courtdeep border border-line px-3 py-2 text-sm w-72 outline-none focus:border-ember"
+          className="rounded-lg bg-white border border-slate-300 px-3 py-2 text-sm w-72 outline-none focus:border-ember"
         />
       </div>
 
-      <div className="rounded-2xl border border-line bg-courtdeep overflow-hidden">
+      <div className="rounded-2xl bg-white shadow overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead className="bg-court text-ember text-left">
@@ -93,7 +94,7 @@ export default function Dashboard() {
               {filtered.map((p) => {
                 const pay = paiementInfo(p.dateDernierPaiement)
                 return (
-                  <tr key={p.id} className="border-t border-line">
+                  <tr key={p.id} className="border-t border-slate-200">
                     <Td>
                       <div className="font-semibold">{p.nom}</div>
                       <div className="text-slate-400 text-xs">{p.email}</div>
@@ -129,12 +130,13 @@ export default function Dashboard() {
         </div>
       </div>
     </div>
+    </div>
   )
 }
 
 function StatCard({ label, value }) {
   return (
-    <div className="rounded-2xl border border-line bg-courtdeep p-5">
+    <div className="rounded-2xl bg-white shadow p-5">
       <div className="text-xs uppercase tracking-wide text-slate-400 font-semibold">{label}</div>
       <div className="font-display text-4xl mt-1">{value}</div>
     </div>

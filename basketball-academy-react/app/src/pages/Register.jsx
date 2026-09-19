@@ -64,6 +64,7 @@ export default function Register() {
   }
 
   return (
+    <div className="bg-court text-white min-h-[80vh]">
     <div className="max-w-lg mx-auto px-4 py-16">
       <div className="rounded-2xl border border-line bg-courtdeep p-8">
         <h1 className="font-display text-3xl text-ember mb-6">Inscription</h1>
@@ -93,6 +94,7 @@ export default function Register() {
           Déjà inscrit ? <Link to="/connexion" className="text-ember">Connectez-vous</Link>
         </p>
       </div>
+    </div>
     </div>
   )
 }

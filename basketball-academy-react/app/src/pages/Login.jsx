@@ -38,7 +38,8 @@ export default function Login() {
   }
 
   return (
-    <div className="max-w-md mx-auto px-4 py-16">
+    <div className="bg-court text-white min-h-[80vh] flex items-center">
+    <div className="max-w-md mx-auto px-4 py-16 w-full">
       <div className="rounded-2xl border border-line bg-courtdeep p-8">
         <h1 className="font-display text-3xl text-ember mb-6">Connexion</h1>
         {error && <div className="mb-4 rounded-lg bg-red-500/10 border border-red-500/40 text-red-300 text-sm p-3">{error}</div>}
@@ -61,6 +62,7 @@ export default function Login() {
           Pas encore de compte ? <Link to="/inscription" className="text-ember">Inscrivez-vous</Link>
         </p>
       </div>
+    </div>
     </div>
   )
 }

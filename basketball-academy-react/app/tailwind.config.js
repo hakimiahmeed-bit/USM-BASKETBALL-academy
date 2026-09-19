@@ -4,11 +4,11 @@ export default {
   theme: {
     extend: {
       colors: {
-        court: '#0d1b2a',
-        courtdeep: '#081220',
-        ember: '#f4a300',
-        emberdeep: '#c97e00',
-        line: '#1b3a4b',
+        court: '#121212',
+        courtdeep: '#000000',
+        ember: '#ffc107',
+        emberdeep: '#e0a800',
+        line: '#2d2d2d',
       },
       fontFamily: {
         display: ['"Barlow Condensed"', 'sans-serif'],
