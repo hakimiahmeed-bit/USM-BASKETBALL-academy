@@ -33,7 +33,7 @@ export default function Home() {
         <img
           src="/logoo.png"
           alt="Logo Basket Academy"
-          className="w-32 h-32 md:w-36 md:h-36 object-contain mx-auto mb-6 rounded-full bg-court border-2 border-ember p-2"
+          className="w-32 h-32 md:w-36 md:h-36 object-contain mx-auto mb-6 rounded-full bg-court border-2 border-ember p-2 transition-transform duration-300 hover:scale-105 hover:rotate-2"
           style={{ filter: 'drop-shadow(0 0 15px rgba(255,193,7,0.4))' }}
         />
         <h1 className="text-4xl md:text-5xl font-bold text-ember mb-3">Bienvenue à US Mourouj</h1>
@@ -115,7 +115,7 @@ export default function Home() {
               <button
                 key={src}
                 onClick={() => setLightbox({ src, alt: `Basketball Photo ${i + 1}` })}
-                className="group rounded-xl overflow-hidden shadow-lg hover:shadow-ember/40 hover:-translate-y-1 transition-all"
+                className="group rounded-xl overflow-hidden shadow-lg hover:-translate-y-1 hover:shadow-[0_8px_25px_rgba(255,193,7,0.4)] transition-all duration-300"
               >
                 <img src={src} alt={`Basketball Photo ${i + 1}`} className="w-full h-36 object-cover group-hover:scale-110 transition-transform duration-300" />
               </button>

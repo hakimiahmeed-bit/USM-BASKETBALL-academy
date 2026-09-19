@@ -136,7 +136,7 @@ export default function Dashboard() {
 
 function StatCard({ label, value }) {
   return (
-    <div className="rounded-2xl bg-white shadow p-5">
+    <div className="rounded-2xl bg-white shadow p-5 border-l-4 border-ember hover:-translate-y-1 transition-transform">
       <div className="text-xs uppercase tracking-wide text-slate-400 font-semibold">{label}</div>
       <div className="font-display text-4xl mt-1">{value}</div>
     </div>

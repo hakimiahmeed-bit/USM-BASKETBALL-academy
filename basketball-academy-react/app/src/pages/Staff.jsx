@@ -89,7 +89,7 @@ function StaffCard({ nom, role, img, desc, dark, onClick }) {
   return (
     <div className="bg-white text-court rounded-2xl shadow p-5 text-center">
       <button onClick={onClick} className="w-28 h-28 mx-auto rounded-full overflow-hidden border-4 border-ember mb-3 block">
-        <img src={img} alt={nom} className="w-full h-full object-cover" />
+        <img src={img} alt={nom} className="w-full h-full object-cover transition-transform duration-300 hover:scale-110" />
       </button>
       <h4 className="font-bold">{nom}</h4>
       <span className={`inline-block text-xs font-bold px-3 py-1 rounded-full my-2 ${dark ? 'bg-court text-ember border border-ember' : 'bg-ember text-court'}`}>
