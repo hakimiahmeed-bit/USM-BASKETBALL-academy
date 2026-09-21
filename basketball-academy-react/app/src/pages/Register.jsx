@@ -14,7 +14,7 @@ function determinerCategorie(dateNaissance) {
 
   if (age >= 5 && age <= 9) return 'Poussin U10'
   if (age >= 10 && age <= 13) return 'Benjamin U12'
-  if (age >= 14 && age <= 18) return 'Académie Jeunes (U18)'
+  if (age >= 14 && age <= 18) return 'Académie Jeunes'
   return 'Académie Seniors'
 }
 
@@ -82,7 +82,7 @@ export default function Register() {
               <option value="">Automatique selon l'âge</option>
               <option>Poussin U10</option>
               <option>Benjamin U12</option>
-              <option>Académie Jeunes (U18)</option>
+              <option>Académie Jeunes</option>
               <option>Académie Seniors</option>
             </select>
           </Field>

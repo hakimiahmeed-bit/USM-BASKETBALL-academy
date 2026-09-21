@@ -2,6 +2,13 @@ import { useEffect, useMemo, useState } from 'react'
 import { collection, deleteDoc, doc, onSnapshot, orderBy, query, updateDoc } from 'firebase/firestore'
 import { db } from '../../firebase'
 
+// Cotisation mensuelle par catégorie (en TND).
+function getCotisation(categorie) {
+  const c = (categorie || '').toLowerCase()
+  if (c.includes('senior')) return 50
+  return 45 // Poussin, Benjamin, Académie Jeunes
+}
+
 function statutBadge(statut) {
   if (statut === 'Approuvé') return 'bg-green-500/20 text-green-300 border-green-500/40'
   if (statut === 'Rejeté') return 'bg-red-500/20 text-red-300 border-red-500/40'
@@ -37,6 +44,27 @@ export default function Dashboard() {
     approuves: players.filter((p) => p.statut === 'Approuvé').length,
   }), [players])
 
+  const now = new Date()
+  const paymentStats = useMemo(() => {
+    const approuves = players.filter((p) => p.statut === 'Approuvé')
+    const payesCeMois = approuves.filter((p) => {
+      if (!p.dateDernierPaiement) return false
+      const d = new Date(p.dateDernierPaiement)
+      return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear()
+    })
+    const nonPayes = approuves.filter((p) => !payesCeMois.includes(p))
+    return {
+      approuves,
+      payes: payesCeMois,
+      nonPayes,
+      encaisse: payesCeMois.reduce((sum, p) => sum + getCotisation(p.categorie), 0),
+      attendu: approuves.reduce((sum, p) => sum + getCotisation(p.categorie), 0),
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [players])
+
+  const moisLabel = now.toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' })
+
   const filtered = useMemo(() => {
     const s = search.trim().toLowerCase()
     if (!s) return players
@@ -62,6 +90,44 @@ export default function Dashboard() {
         <StatCard label="Total Inscrits" value={stats.total} />
         <StatCard label="En Attente" value={stats.enAttente} />
         <StatCard label="Approuvés" value={stats.approuves} />
+      </div>
+
+      {/* Statistiques de paiement du mois */}
+      <div className="rounded-2xl bg-court text-white shadow p-6 mb-8">
+        <div className="flex flex-wrap items-center justify-between gap-2 mb-5">
+          <h2 className="font-display text-xl text-ember capitalize">💰 Statistiques de Paiement — {moisLabel}</h2>
+          <span className="text-xs text-slate-400">Cotisation : 45 DT (Poussin, Benjamin, Académie Jeunes) · 50 DT (Académie Seniors)</span>
+        </div>
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-5">
+          <MiniStat label="Payé ce mois" value={paymentStats.payes.length} color="text-green-400" />
+          <MiniStat label="Non payé" value={paymentStats.nonPayes.length} color="text-red-400" />
+          <MiniStat label="Encaissé" value={`${paymentStats.encaisse} DT`} color="text-ember" />
+          <MiniStat label="Attendu (total)" value={`${paymentStats.attendu} DT`} color="text-slate-300" />
+        </div>
+
+        {/* Progress bar */}
+        <div className="h-2.5 rounded-full bg-white/10 overflow-hidden mb-2">
+          <div
+            className="h-full rounded-full bg-gradient-to-r from-ember to-yellow-300 transition-all duration-700"
+            style={{ width: `${paymentStats.approuves.length ? Math.round((paymentStats.payes.length / paymentStats.approuves.length) * 100) : 0}%` }}
+          />
+        </div>
+        <p className="text-xs text-slate-400 mb-4">
+          {paymentStats.approuves.length ? Math.round((paymentStats.payes.length / paymentStats.approuves.length) * 100) : 0}% des joueurs approuvés ont payé ce mois-ci
+        </p>
+
+        {paymentStats.nonPayes.length > 0 && (
+          <div>
+            <div className="text-sm font-bold text-slate-300 mb-2">À relancer ({paymentStats.nonPayes.length}) :</div>
+            <div className="flex flex-wrap gap-2">
+              {paymentStats.nonPayes.map((p) => (
+                <span key={p.id} className="text-xs bg-white/5 border border-white/10 rounded-full px-3 py-1">
+                  {p.nom} <span className="text-ember">({getCotisation(p.categorie)} DT)</span>
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
 
       <div className="flex items-center justify-between mb-4 gap-4">
@@ -130,6 +196,15 @@ export default function Dashboard() {
         </div>
       </div>
     </div>
+    </div>
+  )
+}
+
+function MiniStat({ label, value, color }) {
+  return (
+    <div className="bg-white/5 rounded-xl p-4 text-center">
+      <div className={`font-display text-3xl ${color}`}>{value}</div>
+      <div className="text-xs text-slate-400 mt-1">{label}</div>
     </div>
   )
 }
